@@ -27,6 +27,9 @@ python3 -m venv .venv
 ./.venv/bin/newsletter data collect \
   --start-date 2026-03-01 \
   --end-date 2026-03-07 \
+  --collect-dir build/data-collect \
+  --storefront-url "https://cfc.localline.ca/storefront/api/products" \
+  --storefront-category new \
   --out build/collected.json \
   --overrides overrides/week-2026-W10.yaml
 
@@ -50,10 +53,16 @@ python3 -m venv .venv
 
 Open `docs/index.html` or publish via GitHub Pages.
 
-## Data source (v1)
+## Data source fan-out (v1)
 
-`data collect` currently sources from:
-- `mcp-localline orders-export --start-date --end-date`
-- optional weekly override YAML
+`data collect` now runs a fan-out pipeline into its own directory (`build/data-collect/<start>_<end>/`):
 
-It computes deterministic summaries (orders count, line-item count, top products/vendors) and writes normalized collected JSON.
+1. `orders-export` via `mcp-localline`
+   - writes `orders-export.raw.json` + `orders-export.normalized.json`
+2. Local Line storefront products API (category=`new`)
+   - writes `storefront.raw.json` + `storefront.normalized.json`
+   - normalized fields include product name, image URL, and price cents
+3. Optional weekly override YAML
+   - writes `overrides.json`
+
+Then it composes `build/collected.json` with source provenance and pointers to source files.
