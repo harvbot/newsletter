@@ -1,0 +1,25 @@
+[project]
+name = "newsletter"
+version = "0.1.0"
+description = "Deterministic weekly newsletter pipeline for CFC"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "typer>=0.12.0",
+  "pydantic>=2.8.0",
+  "jinja2>=3.1.0",
+  "pyyaml>=6.0.1"
+]
+
+[project.scripts]
+newsletter = "newsletter.cli:app"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
