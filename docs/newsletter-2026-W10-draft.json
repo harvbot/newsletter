@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "generated_at_et": "2026-03-07T18:51:51.258614-05:00",
+  "status": "draft",
+  "draft": {
+    "schema_version": "1.0",
+    "generated_at_et": "2026-03-07T18:51:50.360746-05:00",
+    "week_label": "2026-03-01 to 2026-03-07",
+    "subject": "CFC Weekly Update — 2026-03-07",
+    "preheader": "Fresh from the farm, available this week.",
+    "sections": [
+      {
+        "title": "This Week at County Farm Collective",
+        "items": [
+          "Welcome to this week's farm update.",
+          "Availability can change quickly based on harvest volume."
+        ]
+      },
+      {
+        "title": "Featured Products",
+        "items": [
+          "Rainbow carrots",
+          "Spring mix",
+          "Oyster mushrooms"
+        ]
+      },
+      {
+        "title": "New in Storefront",
+        "items": [
+          "No new-category storefront products were collected this run."
+        ]
+      },
+      {
+        "title": "Available This Week",
+        "items": [
+          "Whole Chicken (Price TBD) — Return to Earth",
+          "Boneless Chicken Breast (Price TBD) — Return to Earth",
+          "Chicken Legs (drumsticks) (Price TBD) — Return to Earth",
+          "Boneless Chicken Thighs (Price TBD) — Return to Earth",
+          "Pork Chops (Center Cut) (Price TBD) — Return to Earth",
+          "Pork Chops (Center Cut) (Price TBD) — Return to Earth",
+          "Ground Pork (Price TBD) — Return to Earth",
+          "Ground Pork (Price TBD) — Return to Earth",
+          "Pork Butt Roast (Price TBD) — Return to Earth",
+          "Pork Butt Roast (Price TBD) — Return to Earth",
+          "Pork Ribs (Price TBD) — Return to Earth",
+          "Pork Ribs (Price TBD) — Return to Earth"
+        ]
+      },
+      {
+        "title": "Vendor Highlights",
+        "items": [
+          "The Elmbrook Farm",
+          "Return to Earth"
+        ]
+      }
+    ],
+    "provenance": {
+      "collected_input": "build/collected.json"
+    }
+  },
+  "html": "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>CFC Weekly Update — 2026-03-07</title>\n    <style>\n      body { font-family: Arial, sans-serif; max-width: 760px; margin: 24px auto; color: #1f2937; line-height: 1.45; }\n      .pill { display:inline-block; padding:4px 10px; border-radius: 999px; background:#ecfdf5; color:#065f46; font-size:12px; }\n      h1 { margin-bottom: 6px; }\n      h2 { margin-top: 22px; }\n      ul { padding-left: 20px; }\n      .footer { margin-top: 28px; font-size: 12px; color: #6b7280; }\n    </style>\n  </head>\n  <body>\n    <div class=\"pill\">County Farm Collective Weekly</div>\n    <h1>CFC Weekly Update — 2026-03-07</h1>\n    <p><em>Fresh from the farm, available this week.</em></p>\n    <p><strong>Week:</strong> 2026-03-01 to 2026-03-07</p>\n\n    \n    <h2>This Week at County Farm Collective</h2>\n    <ul>\n      \n      <li>Welcome to this week's farm update.</li>\n      \n      <li>Availability can change quickly based on harvest volume.</li>\n      \n    </ul>\n    \n    <h2>Featured Products</h2>\n    <ul>\n      \n      <li>Rainbow carrots</li>\n      \n      <li>Spring mix</li>\n      \n      <li>Oyster mushrooms</li>\n      \n    </ul>\n    \n    <h2>New in Storefront</h2>\n    <ul>\n      \n      <li>No new-category storefront products were collected this run.</li>\n      \n    </ul>\n    \n    <h2>Available This Week</h2>\n    <ul>\n      \n      <li>Whole Chicken (Price TBD) — Return to Earth</li>\n      \n      <li>Boneless Chicken Breast (Price TBD) — Return to Earth</li>\n      \n      <li>Chicken Legs (drumsticks) (Price TBD) — Return to Earth</li>\n      \n      <li>Boneless Chicken Thighs (Price TBD) — Return to Earth</li>\n      \n      <li>Pork Chops (Center Cut) (Price TBD) — Return to Earth</li>\n      \n      <li>Pork Chops (Center Cut) (Price TBD) — Return to Earth</li>\n      \n      <li>Ground Pork (Price TBD) — Return to Earth</li>\n      \n      <li>Ground Pork (Price TBD) — Return to Earth</li>\n      \n      <li>Pork Butt Roast (Price TBD) — Return to Earth</li>\n      \n      <li>Pork Butt Roast (Price TBD) — Return to Earth</li>\n      \n      <li>Pork Ribs (Price TBD) — Return to Earth</li>\n      \n      <li>Pork Ribs (Price TBD) — Return to Earth</li>\n      \n    </ul>\n    \n    <h2>Vendor Highlights</h2>\n    <ul>\n      \n      <li>The Elmbrook Farm</li>\n      \n      <li>Return to Earth</li>\n      \n    </ul>\n    \n\n    <div class=\"footer\">\n      Generated at 2026-03-07T18:51:50.360746-05:00\n    </div>\n  </body>\n</html>"
+}
