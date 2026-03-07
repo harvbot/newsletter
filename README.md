@@ -62,7 +62,12 @@ Open `docs/index.html` or publish via GitHub Pages.
 2. Local Line storefront products API (category=`new`)
    - writes `storefront.raw.json` + `storefront.normalized.json`
    - normalized fields include product name, image URL, and price cents
-3. Optional weekly override YAML
+3. Default storefront price list via `mcp-localline storefront-price-list`
+   - fetches anonymous storefront token → `GET /api/storefront/v2/price-lists/default/` → products
+   - writes `price-list.raw.json` + `price-list.normalized.json`
+   - normalized fields include product name, sku, price cents, image URL, and vendor name
+   - skip with `--no-price-list`
+4. Optional weekly override YAML
    - writes `overrides.json`
 
-Then it composes `build/collected.json` with source provenance and pointers to source files.
+Then it composes `build/collected.json` (schema v1.2) with source provenance and pointers to source files.

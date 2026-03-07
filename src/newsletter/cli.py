@@ -35,6 +35,7 @@ class CollectedInput(BaseModel):
     top_products: list[dict[str, Any]] = Field(default_factory=list)
     top_vendors: list[dict[str, Any]] = Field(default_factory=list)
     storefront_new_products: list[dict[str, Any]] = Field(default_factory=list)
+    price_list_products: list[dict[str, Any]] = Field(default_factory=list)
     overrides: dict[str, Any] = Field(default_factory=dict)
     source_files: dict[str, Any] = Field(default_factory=dict)
 
@@ -73,6 +74,7 @@ def data_collect(
     storefront_url: str = typer.Option("", "--storefront-url", help="Local Line storefront products API endpoint"),
     storefront_category: str = typer.Option("new", "--storefront-category", help="Storefront category filter"),
     storefront_token: str = typer.Option("", "--storefront-token", help="Optional storefront API bearer token"),
+    price_list: bool = typer.Option(True, "--price-list/--no-price-list", help="Collect default storefront price list via mcp-localline"),
 ) -> None:
     try:
         result = run_collection(
@@ -85,6 +87,7 @@ def data_collect(
             storefront_url=storefront_url,
             storefront_category=storefront_category,
             storefront_token=storefront_token,
+            collect_price_list=price_list,
             now_et=_now_et(),
         )
     except Exception as e:
@@ -103,8 +106,13 @@ def content_draft(
 
     featured = collected.overrides.get("featured_products") if isinstance(collected.overrides, dict) else None
     if not isinstance(featured, list) or not featured:
+        price_list_featured = [p.get("name", "") for p in collected.price_list_products[:5] if isinstance(p, dict)]
         storefront_featured = [p.get("name", "") for p in collected.storefront_new_products[:5] if isinstance(p, dict)]
-        featured = [x for x in storefront_featured if x] or [p["name"] for p in collected.top_products[:5]]
+        featured = (
+            [x for x in price_list_featured if x]
+            or [x for x in storefront_featured if x]
+            or [p["name"] for p in collected.top_products[:5]]
+        )
 
     notes = []
     if isinstance(collected.overrides, dict) and isinstance(collected.overrides.get("notes"), list):
@@ -124,6 +132,20 @@ def content_draft(
         if name:
             new_storefront_items.append(f"{name}{extra}")
 
+    price_list_items = []
+    for p in collected.price_list_products[:12]:
+        if not isinstance(p, dict):
+            continue
+        name = p.get("name", "")
+        price_cents = p.get("price_cents")
+        price = f"${(price_cents or 0)/100:.2f}" if isinstance(price_cents, int) else "Price TBD"
+        vendor = p.get("vendor_name", "")
+        entry = f"{name} ({price})"
+        if vendor:
+            entry += f" — {vendor}"
+        if name:
+            price_list_items.append(entry)
+
     sections = [
         {
             "title": "This Week at County Farm Collective",
@@ -139,6 +161,10 @@ def content_draft(
         {
             "title": "New in Storefront",
             "items": new_storefront_items or ["No new-category storefront products were collected this run."],
+        },
+        {
+            "title": "Available This Week",
+            "items": price_list_items or ["No price list products were collected this run."],
         },
         {
             "title": "Vendor Highlights",
@@ -179,7 +205,7 @@ def check_html(
     input: Path = typer.Option(..., "--input"),
 ) -> None:
     html = input.read_text()
-    required = ["<html", "<body", "Featured Products", "Vendor Highlights"]
+    required = ["<html", "<body", "Featured Products", "Vendor Highlights", "Available This Week"]
     missing = [x for x in required if x not in html]
     if missing:
         typer.echo(json.dumps({"ok": False, "missing": missing}, indent=2))

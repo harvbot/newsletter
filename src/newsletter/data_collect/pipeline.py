@@ -154,6 +154,63 @@ def _collect_storefront_source(storefront_url: str, category: str, token: str = 
     }
 
 
+def _collect_price_list_source(mcp_command: str) -> dict[str, Any]:
+    proc = subprocess.run(
+        [mcp_command, "storefront-price-list"],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"storefront-price-list command failed: {proc.stderr or proc.stdout}")
+    envelope = json.loads(proc.stdout)
+    if not envelope.get("ok"):
+        raise RuntimeError(f"storefront-price-list failed: {json.dumps(envelope)}")
+
+    pl_data = envelope.get("price_list") or {}
+    products_raw = envelope.get("products") or {}
+    products_payload = products_raw.get("data") if isinstance(products_raw, dict) else products_raw
+    products_list = _extract_products(products_payload)
+
+    normalized_products: list[dict[str, Any]] = []
+    for p in products_list:
+        name = str(p.get("name") or p.get("title") or "")
+        if not name:
+            continue
+        vendor = p.get("vendor") or {}
+        vendor_name = str(
+            p.get("vendor_name")
+            or p.get("producer_name")
+            or (vendor.get("name") if isinstance(vendor, dict) else "")
+            or ""
+        )
+        image_url = p.get("image_url") or p.get("image") or p.get("primary_image_url") or ""
+        price_cents = (
+            _to_price_cents(p.get("price_cents"))
+            or _to_price_cents(p.get("price"))
+            or _to_price_cents(p.get("unit_price"))
+            or _to_price_cents(p.get("base_price"))
+        )
+        normalized_products.append({
+            "name": name,
+            "sku": str(p.get("sku") or p.get("id") or ""),
+            "price_cents": price_cents,
+            "image_url": str(image_url),
+            "vendor_name": vendor_name,
+            "currency": p.get("currency") or "CAD",
+        })
+
+    return {
+        "source": "price_list_default",
+        "raw": envelope,
+        "normalized": {
+            "price_list_id": pl_data.get("id"),
+            "price_list_name": str(pl_data.get("name") or pl_data.get("title") or ""),
+            "count": len(normalized_products),
+            "products": normalized_products,
+        },
+    }
+
+
 def run_collection(
     *,
     start_date: str,
@@ -165,6 +222,7 @@ def run_collection(
     storefront_url: str,
     storefront_category: str,
     storefront_token: str,
+    collect_price_list: bool,
     now_et: str,
 ) -> dict[str, Any]:
     run_id = f"{start_date}_{end_date}"
@@ -181,6 +239,12 @@ def run_collection(
         _write_json(run_dir / "storefront.raw.json", storefront["raw"])
         _write_json(run_dir / "storefront.normalized.json", storefront["normalized"])
 
+    price_list: dict[str, Any] = {"source": "price_list_default", "normalized": {"count": 0, "products": [], "price_list_id": None, "price_list_name": ""}}
+    if collect_price_list:
+        price_list = _collect_price_list_source(mcp_command)
+        _write_json(run_dir / "price-list.raw.json", price_list["raw"])
+        _write_json(run_dir / "price-list.normalized.json", price_list["normalized"])
+
     overrides_payload: dict[str, Any] = {}
     if overrides_path and str(overrides_path) and overrides_path.exists():
         loaded = yaml.safe_load(overrides_path.read_text())
@@ -188,28 +252,33 @@ def run_collection(
             overrides_payload = loaded
     _write_json(run_dir / "overrides.json", overrides_payload)
 
+    sources = ["orders_export", "storefront_products", "price_list_default", "overrides"] if collect_price_list else ["orders_export", "storefront_products", "overrides"]
     collected = {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "generated_at_et": now_et,
         "window": {"start_date": start_date, "end_date": end_date},
         "provenance": {
-            "sources": ["orders_export", "storefront_products", "overrides"],
+            "sources": sources,
             "collect_run_dir": str(run_dir),
         },
         "metrics": {
             "orders": orders["normalized"].get("orders", 0),
             "line_items": orders["normalized"].get("line_items", 0),
             "storefront_new_products": storefront["normalized"].get("count", 0),
+            "price_list_products": price_list["normalized"].get("count", 0),
         },
         "top_products": orders["normalized"].get("top_products", []),
         "top_vendors": orders["normalized"].get("top_vendors", []),
         "storefront_new_products": storefront["normalized"].get("products", []),
+        "price_list_products": price_list["normalized"].get("products", []),
         "overrides": overrides_payload,
         "source_files": {
             "orders_raw": str(run_dir / "orders-export.raw.json"),
             "orders_normalized": str(run_dir / "orders-export.normalized.json"),
             "storefront_raw": str(run_dir / "storefront.raw.json") if storefront_url.strip() else None,
             "storefront_normalized": str(run_dir / "storefront.normalized.json") if storefront_url.strip() else None,
+            "price_list_raw": str(run_dir / "price-list.raw.json") if collect_price_list else None,
+            "price_list_normalized": str(run_dir / "price-list.normalized.json") if collect_price_list else None,
             "overrides": str(run_dir / "overrides.json"),
         },
     }
@@ -222,4 +291,5 @@ def run_collection(
         "orders": collected["metrics"]["orders"],
         "line_items": collected["metrics"]["line_items"],
         "storefront_new_products": collected["metrics"]["storefront_new_products"],
+        "price_list_products": collected["metrics"]["price_list_products"],
     }
