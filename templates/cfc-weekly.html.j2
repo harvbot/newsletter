@@ -29,7 +29,19 @@
       {% set title_price = parts[0] %}
       {% set vendor = parts[1] if parts|length > 1 else '' %}
       {% set image = parts[2] if parts|length > 2 else '' %}
-      {% set note = parts[3] if parts|length > 3 else '' %}
+      {% set note = '' %}
+      {% set link = '' %}
+      {% if parts|length > 4 %}
+        {% set note = parts[3] %}
+        {% set link = parts[4] %}
+      {% elif parts|length > 3 %}
+        {% if parts[3].startswith('http://') or parts[3].startswith('https://') %}
+          {% set link = parts[3] %}
+        {% else %}
+          {% set note = parts[3] %}
+        {% endif %}
+      {% endif %}
+      {% if link %}<a href="{{ link }}" style="text-decoration:none; color:inherit; display:block;">{% endif %}
       <div style="border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;">
         {% if image %}
         <img src="{{ image }}" alt="{{ title_price }}" style="width:100%; height:170px; object-fit:cover; display:block;"/>
@@ -40,6 +52,7 @@
           {% if note %}<div style="font-size:12px; color:#6b7280; margin-top:6px;">{{ note }}</div>{% endif %}
         </div>
       </div>
+      {% if link %}</a>{% endif %}
       {% endfor %}
     </div>
     {% elif section["title"] == "Main Message" %}

@@ -78,7 +78,8 @@ Keep one weekly file and update it throughout the week:
 - `overrides/week-YYYY-WW.yaml`
 
 Fields currently supported:
-- `hero_products`: pin/force products into the NEW THIS WEEK flyer cards
+- `hero_products`: pin/force products into the NEW THIS WEEK flyer cards (optional `link` per tile)
+- `storefront_link`: default URL used when product tiles are clicked
 - `notes`: quick notes section bullets
 - `main_message`: narrative/storytelling lines for the newsletter's core seasonal message
 - `suppress_products`: hide products by name

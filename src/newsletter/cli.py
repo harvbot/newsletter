@@ -118,6 +118,7 @@ def content_draft(
     overrides = collected.overrides if isinstance(collected.overrides, dict) else {}
     notes = [str(x) for x in overrides.get("notes", [])] if isinstance(overrides.get("notes"), list) else []
     main_message = [str(x) for x in overrides.get("main_message", [])] if isinstance(overrides.get("main_message"), list) else []
+    storefront_link = str(overrides.get("storefront_link") or "https://cfc.localline.ca/storefront").strip()
     suppress = set(str(x).strip().lower() for x in overrides.get("suppress_products", []) if str(x).strip()) if isinstance(overrides.get("suppress_products"), list) else set()
 
     hero_overrides = overrides.get("hero_products", []) if isinstance(overrides.get("hero_products"), list) else []
@@ -137,6 +138,7 @@ def content_draft(
                 "vendor": str(hp.get("vendor") or ""),
                 "image": str(hp.get("image") or ""),
                 "note": str(hp.get("note") or ""),
+                "link": str(hp.get("link") or storefront_link),
             }
         )
 
@@ -153,6 +155,7 @@ def content_draft(
             "vendor": str(p.get("vendor_name") or "").strip(),
             "image": str(p.get("image_url") or "").strip(),
             "note": f"Type: {product_type}" if product_type else "",
+            "link": storefront_link,
         }
 
     max_cards = 12
@@ -214,6 +217,8 @@ def content_draft(
             line += f" — {p['image']}"
         if p.get("note"):
             line += f" — {p['note']}"
+        if p.get("link"):
+            line += f" — {p['link']}"
         hero_lines.append(line)
 
     sections = [
