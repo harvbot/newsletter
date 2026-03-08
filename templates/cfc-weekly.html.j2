@@ -42,6 +42,12 @@
       </div>
       {% endfor %}
     </div>
+    {% elif section["title"] == "Main Message" %}
+    <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:14px;">
+      {% for item in section["items"] %}
+      <p style="margin:0 0 10px 0;">{{ item }}</p>
+      {% endfor %}
+    </div>
     {% else %}
     <ul>
       {% for item in section["items"] %}

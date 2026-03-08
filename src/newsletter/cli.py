@@ -117,7 +117,7 @@ def content_draft(
 
     overrides = collected.overrides if isinstance(collected.overrides, dict) else {}
     notes = [str(x) for x in overrides.get("notes", [])] if isinstance(overrides.get("notes"), list) else []
-    callouts = [str(x) for x in overrides.get("callouts", [])] if isinstance(overrides.get("callouts"), list) else []
+    main_message = [str(x) for x in overrides.get("main_message", [])] if isinstance(overrides.get("main_message"), list) else []
     suppress = set(str(x).strip().lower() for x in overrides.get("suppress_products", []) if str(x).strip()) if isinstance(overrides.get("suppress_products"), list) else set()
 
     hero_overrides = overrides.get("hero_products", []) if isinstance(overrides.get("hero_products"), list) else []
@@ -140,28 +140,70 @@ def content_draft(
             }
         )
 
-    # 2) fallback from MCP category=New products
-    for p in mcp_new_products:
-        if len(hero_products) >= 12:
-            break
-        if not isinstance(p, dict):
-            continue
-        name = str(p.get("name", "")).strip()
-        if not name or name.lower() in suppress:
-            continue
-        if any(x.get("name", "").lower() == name.lower() for x in hero_products):
-            continue
+    # 2) fallback from MCP products with diversity across vendors + product types
+    candidates = [p for p in collected.price_list_products if isinstance(p, dict)]
+
+    def _to_card(p: dict[str, Any]) -> dict[str, Any]:
         price_cents = p.get("price_cents")
         price = f"${(price_cents or 0)/100:.2f}" if isinstance(price_cents, int) else "Price TBD"
-        hero_products.append(
-            {
-                "name": name,
-                "price": price,
-                "vendor": str(p.get("vendor_name") or ""),
-                "image": str(p.get("image_url") or ""),
-                "note": "",
-            }
-        )
+        product_type = str(p.get("price_list_category_name") or "").strip()
+        return {
+            "name": str(p.get("name") or "").strip(),
+            "price": price,
+            "vendor": str(p.get("vendor_name") or "").strip(),
+            "image": str(p.get("image_url") or "").strip(),
+            "note": f"Type: {product_type}" if product_type else "",
+        }
+
+    max_cards = 12
+    seen_vendors = {str(x.get("vendor") or "").strip().lower() for x in hero_products if str(x.get("vendor") or "").strip()}
+    seen_types = set()
+    for x in hero_products:
+        note = str(x.get("note") or "")
+        if note.lower().startswith("type:"):
+            seen_types.add(note.split(":", 1)[1].strip().lower())
+
+    while len(hero_products) < max_cards:
+        best_idx = None
+        best_score = -1
+
+        for idx, p in enumerate(candidates):
+            name = str(p.get("name") or "").strip()
+            if not name or name.lower() in suppress:
+                continue
+            if any(x.get("name", "").lower() == name.lower() for x in hero_products):
+                continue
+
+            vendor = str(p.get("vendor_name") or "").strip().lower()
+            ptype = str(p.get("price_list_category_name") or "").strip().lower()
+            is_new = ptype == "new"
+
+            score = 0
+            if vendor and vendor not in seen_vendors:
+                score += 3
+            if ptype and ptype not in seen_types:
+                score += 3
+            if is_new:
+                score += 2
+
+            if score > best_score:
+                best_score = score
+                best_idx = idx
+
+        if best_idx is None:
+            break
+
+        picked = candidates.pop(best_idx)
+        card = _to_card(picked)
+        if not card["name"]:
+            continue
+        hero_products.append(card)
+
+        vendor_norm = card["vendor"].strip().lower()
+        if vendor_norm:
+            seen_vendors.add(vendor_norm)
+        if card["note"].lower().startswith("type:"):
+            seen_types.add(card["note"].split(":", 1)[1].strip().lower())
 
     hero_lines = []
     for p in hero_products:
@@ -185,8 +227,8 @@ def content_draft(
         },
     ]
 
-    if callouts:
-        sections.append({"title": "Callouts", "items": callouts})
+    if main_message:
+        sections.append({"title": "Main Message", "items": main_message})
 
     draft = Draft(
         generated_at_et=_now_et(),

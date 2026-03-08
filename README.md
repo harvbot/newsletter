@@ -80,5 +80,5 @@ Keep one weekly file and update it throughout the week:
 Fields currently supported:
 - `hero_products`: pin/force products into the NEW THIS WEEK flyer cards
 - `notes`: quick notes section bullets
-- `callouts`: optional callout bullets
+- `main_message`: narrative/storytelling lines for the newsletter's core seasonal message
 - `suppress_products`: hide products by name
