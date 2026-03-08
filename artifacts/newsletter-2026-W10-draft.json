@@ -1,33 +1,18 @@
 {
   "schema_version": "1.0",
-  "generated_at_et": "2026-03-07T19:10:29.532362-05:00",
+  "generated_at_et": "2026-03-07T22:19:03.443682-05:00",
   "status": "draft",
   "draft": {
     "schema_version": "1.0",
-    "generated_at_et": "2026-03-07T19:10:28.592046-05:00",
+    "generated_at_et": "2026-03-07T22:19:02.535663-05:00",
     "week_label": "2026-03-01 to 2026-03-07",
     "subject": "CFC Weekly Update — 2026-03-07",
     "preheader": "Fresh from the farm, available this week.",
     "sections": [
       {
-        "title": "This Week at County Farm Collective",
+        "title": "NEW THIS WEEK",
         "items": [
-          "Welcome to this week's farm update.",
-          "Availability can change quickly based on harvest volume."
-        ]
-      },
-      {
-        "title": "Featured Products",
-        "items": [
-          "Rainbow carrots",
-          "Spring mix",
-          "Oyster mushrooms"
-        ]
-      },
-      {
-        "title": "New This Week (MCP)",
-        "items": [
-          "Pork Chops (Center Cut) ($14.40) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/JmN5A.display.jpeg",
+          "Pork Chops (Center Cut) ($14.40) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/JmN5A.display.jpeg — Great for weeknight grilling.",
           "Ground Pork ($10.20) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/izofX.display.jpeg",
           "Pork Butt Roast ($54.00) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/fXEmj.display.jpeg",
           "Pork Ribs ($21.60) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/1akIX.display.jpeg",
@@ -36,10 +21,16 @@
         ]
       },
       {
-        "title": "Vendor Highlights",
+        "title": "Quick Notes",
         "items": [
-          "The Elmbrook Farm",
-          "Return to Earth"
+          "Orders close Tuesday at midnight.",
+          "Delivery and pickup windows are listed at checkout."
+        ]
+      },
+      {
+        "title": "Callouts",
+        "items": [
+          "New pork cuts from Return to Earth now live."
         ]
       }
     ],
@@ -47,5 +38,5 @@
       "collected_input": "build/collected.json"
     }
   },
-  "html": "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>CFC Weekly Update — 2026-03-07</title>\n    <style>\n      body { font-family: Arial, sans-serif; max-width: 760px; margin: 24px auto; color: #1f2937; line-height: 1.45; }\n      .pill { display:inline-block; padding:4px 10px; border-radius: 999px; background:#ecfdf5; color:#065f46; font-size:12px; }\n      h1 { margin-bottom: 6px; }\n      h2 { margin-top: 22px; }\n      ul { padding-left: 20px; }\n      .footer { margin-top: 28px; font-size: 12px; color: #6b7280; }\n    </style>\n  </head>\n  <body>\n    <div class=\"pill\">County Farm Collective Weekly</div>\n    <h1>CFC Weekly Update — 2026-03-07</h1>\n    <p><em>Fresh from the farm, available this week.</em></p>\n    <p><strong>Week:</strong> 2026-03-01 to 2026-03-07</p>\n\n    \n    <h2>This Week at County Farm Collective</h2>\n    <ul>\n      \n      <li>Welcome to this week's farm update.</li>\n      \n      <li>Availability can change quickly based on harvest volume.</li>\n      \n    </ul>\n    \n    <h2>Featured Products</h2>\n    <ul>\n      \n      <li>Rainbow carrots</li>\n      \n      <li>Spring mix</li>\n      \n      <li>Oyster mushrooms</li>\n      \n    </ul>\n    \n    <h2>New This Week (MCP)</h2>\n    <ul>\n      \n      <li>Pork Chops (Center Cut) ($14.40) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/JmN5A.display.jpeg</li>\n      \n      <li>Ground Pork ($10.20) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/izofX.display.jpeg</li>\n      \n      <li>Pork Butt Roast ($54.00) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/fXEmj.display.jpeg</li>\n      \n      <li>Pork Ribs ($21.60) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/1akIX.display.jpeg</li>\n      \n      <li>Pork Rib Loin Roast (Bone In) ($36.00) — Return to Earth — https://localline-public-images.s3.amazonaws.com/account/327759/fBddm.display.jpeg</li>\n      \n      <li>Pork Belly ($28.80) — Return to Earth</li>\n      \n    </ul>\n    \n    <h2>Vendor Highlights</h2>\n    <ul>\n      \n      <li>The Elmbrook Farm</li>\n      \n      <li>Return to Earth</li>\n      \n    </ul>\n    \n\n    <div class=\"footer\">\n      Generated at 2026-03-07T19:10:28.592046-05:00\n    </div>\n  </body>\n</html>"
+  "html": "<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>CFC Weekly Update — 2026-03-07</title>\n    <style>\n      body { font-family: Arial, sans-serif; max-width: 760px; margin: 24px auto; color: #1f2937; line-height: 1.45; }\n      .pill { display:inline-block; padding:4px 10px; border-radius: 999px; background:#ecfdf5; color:#065f46; font-size:12px; }\n      h1 { margin-bottom: 6px; }\n      h2 { margin-top: 22px; }\n      ul { padding-left: 20px; }\n      .footer { margin-top: 28px; font-size: 12px; color: #6b7280; }\n    </style>\n  </head>\n  <body>\n    <div class=\"pill\">County Farm Collective Weekly</div>\n    <h1>CFC Weekly Update — 2026-03-07</h1>\n    <p><em>Fresh from the farm, available this week.</em></p>\n    <p><strong>Week:</strong> 2026-03-01 to 2026-03-07</p>\n\n    \n    <h2>NEW THIS WEEK</h2>\n\n    \n    <div style=\"display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;\">\n      \n      \n      \n      \n      \n      \n      <div style=\"border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;\">\n        \n        <img src=\"https://localline-public-images.s3.amazonaws.com/account/327759/JmN5A.display.jpeg\" alt=\"Pork Chops (Center Cut) ($14.40)\" style=\"width:100%; height:170px; object-fit:cover; display:block;\"/>\n        \n        <div style=\"padding:10px;\">\n          <div style=\"font-weight:700;\">Pork Chops (Center Cut) ($14.40)</div>\n          <div style=\"font-size:13px; color:#374151; margin-top:4px;\">Return to Earth</div>\n          <div style=\"font-size:12px; color:#6b7280; margin-top:6px;\">Great for weeknight grilling.</div>\n        </div>\n      </div>\n      \n      \n      \n      \n      \n      \n      <div style=\"border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;\">\n        \n        <img src=\"https://localline-public-images.s3.amazonaws.com/account/327759/izofX.display.jpeg\" alt=\"Ground Pork ($10.20)\" style=\"width:100%; height:170px; object-fit:cover; display:block;\"/>\n        \n        <div style=\"padding:10px;\">\n          <div style=\"font-weight:700;\">Ground Pork ($10.20)</div>\n          <div style=\"font-size:13px; color:#374151; margin-top:4px;\">Return to Earth</div>\n          \n        </div>\n      </div>\n      \n      \n      \n      \n      \n      \n      <div style=\"border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;\">\n        \n        <img src=\"https://localline-public-images.s3.amazonaws.com/account/327759/fXEmj.display.jpeg\" alt=\"Pork Butt Roast ($54.00)\" style=\"width:100%; height:170px; object-fit:cover; display:block;\"/>\n        \n        <div style=\"padding:10px;\">\n          <div style=\"font-weight:700;\">Pork Butt Roast ($54.00)</div>\n          <div style=\"font-size:13px; color:#374151; margin-top:4px;\">Return to Earth</div>\n          \n        </div>\n      </div>\n      \n      \n      \n      \n      \n      \n      <div style=\"border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;\">\n        \n        <img src=\"https://localline-public-images.s3.amazonaws.com/account/327759/1akIX.display.jpeg\" alt=\"Pork Ribs ($21.60)\" style=\"width:100%; height:170px; object-fit:cover; display:block;\"/>\n        \n        <div style=\"padding:10px;\">\n          <div style=\"font-weight:700;\">Pork Ribs ($21.60)</div>\n          <div style=\"font-size:13px; color:#374151; margin-top:4px;\">Return to Earth</div>\n          \n        </div>\n      </div>\n      \n      \n      \n      \n      \n      \n      <div style=\"border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;\">\n        \n        <img src=\"https://localline-public-images.s3.amazonaws.com/account/327759/fBddm.display.jpeg\" alt=\"Pork Rib Loin Roast (Bone In) ($36.00)\" style=\"width:100%; height:170px; object-fit:cover; display:block;\"/>\n        \n        <div style=\"padding:10px;\">\n          <div style=\"font-weight:700;\">Pork Rib Loin Roast (Bone In) ($36.00)</div>\n          <div style=\"font-size:13px; color:#374151; margin-top:4px;\">Return to Earth</div>\n          \n        </div>\n      </div>\n      \n      \n      \n      \n      \n      \n      <div style=\"border:1px solid #d1d5db; border-radius:10px; overflow:hidden; background:#fff;\">\n        \n        <div style=\"padding:10px;\">\n          <div style=\"font-weight:700;\">Pork Belly ($28.80)</div>\n          <div style=\"font-size:13px; color:#374151; margin-top:4px;\">Return to Earth</div>\n          \n        </div>\n      </div>\n      \n    </div>\n    \n\n    \n    <h2>Quick Notes</h2>\n\n    \n    <ul>\n      \n      <li>Orders close Tuesday at midnight.</li>\n      \n      <li>Delivery and pickup windows are listed at checkout.</li>\n      \n    </ul>\n    \n\n    \n    <h2>Callouts</h2>\n\n    \n    <ul>\n      \n      <li>New pork cuts from Return to Earth now live.</li>\n      \n    </ul>\n    \n\n    \n\n    <div class=\"footer\">\n      Generated at 2026-03-07T22:19:02.535663-05:00\n    </div>\n  </body>\n</html>"
 }

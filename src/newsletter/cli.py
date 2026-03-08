@@ -115,48 +115,78 @@ def content_draft(
         if not featured:
             featured = [p["name"] for p in collected.top_products[:5]]
 
-    notes = []
-    if isinstance(collected.overrides, dict) and isinstance(collected.overrides.get("notes"), list):
-        notes = [str(x) for x in collected.overrides["notes"]]
+    overrides = collected.overrides if isinstance(collected.overrides, dict) else {}
+    notes = [str(x) for x in overrides.get("notes", [])] if isinstance(overrides.get("notes"), list) else []
+    callouts = [str(x) for x in overrides.get("callouts", [])] if isinstance(overrides.get("callouts"), list) else []
+    suppress = set(str(x).strip().lower() for x in overrides.get("suppress_products", []) if str(x).strip()) if isinstance(overrides.get("suppress_products"), list) else set()
 
-    mcp_new_items = []
-    for p in mcp_new_products[:12]:
+    hero_overrides = overrides.get("hero_products", []) if isinstance(overrides.get("hero_products"), list) else []
+    hero_products: list[dict[str, Any]] = []
+
+    # 1) explicit weekly hero pins first
+    for hp in hero_overrides:
+        if not isinstance(hp, dict):
+            continue
+        name = str(hp.get("name", "")).strip()
+        if not name:
+            continue
+        hero_products.append(
+            {
+                "name": name,
+                "price": str(hp.get("price") or "Price TBD"),
+                "vendor": str(hp.get("vendor") or ""),
+                "image": str(hp.get("image") or ""),
+                "note": str(hp.get("note") or ""),
+            }
+        )
+
+    # 2) fallback from MCP category=New products
+    for p in mcp_new_products:
+        if len(hero_products) >= 12:
+            break
         if not isinstance(p, dict):
             continue
-        name = p.get("name", "")
+        name = str(p.get("name", "")).strip()
+        if not name or name.lower() in suppress:
+            continue
+        if any(x.get("name", "").lower() == name.lower() for x in hero_products):
+            continue
         price_cents = p.get("price_cents")
         price = f"${(price_cents or 0)/100:.2f}" if isinstance(price_cents, int) else "Price TBD"
-        vendor = p.get("vendor_name", "")
-        image = p.get("image_url") or ""
-        entry = f"{name} ({price})"
-        if vendor:
-            entry += f" — {vendor}"
-        if image:
-            entry += f" — {image}"
-        if name:
-            mcp_new_items.append(entry)
+        hero_products.append(
+            {
+                "name": name,
+                "price": price,
+                "vendor": str(p.get("vendor_name") or ""),
+                "image": str(p.get("image_url") or ""),
+                "note": "",
+            }
+        )
+
+    hero_lines = []
+    for p in hero_products:
+        line = f"{p['name']} ({p['price']})"
+        if p.get("vendor"):
+            line += f" — {p['vendor']}"
+        if p.get("image"):
+            line += f" — {p['image']}"
+        if p.get("note"):
+            line += f" — {p['note']}"
+        hero_lines.append(line)
 
     sections = [
         {
-            "title": "This Week at County Farm Collective",
-            "items": notes or [
-                f"We processed {collected.metrics.get('orders', 0)} orders this week.",
-                f"Top line activity across {collected.metrics.get('line_items', 0)} line items.",
-            ],
+            "title": "NEW THIS WEEK",
+            "items": hero_lines or ["No MCP products were collected in category 'New' for this run."],
         },
         {
-            "title": "Featured Products",
-            "items": featured,
-        },
-        {
-            "title": "New This Week (MCP)",
-            "items": mcp_new_items or ["No MCP products were collected in category 'New' for this run."],
-        },
-        {
-            "title": "Vendor Highlights",
-            "items": [f"{v['name']}" for v in collected.top_vendors[:5]],
+            "title": "Quick Notes",
+            "items": notes or ["Fresh availability posted weekly. Quantities can change quickly."],
         },
     ]
+
+    if callouts:
+        sections.append({"title": "Callouts", "items": callouts})
 
     draft = Draft(
         generated_at_et=_now_et(),
@@ -191,7 +221,7 @@ def check_html(
     input: Path = typer.Option(..., "--input"),
 ) -> None:
     html = input.read_text()
-    required = ["<html", "<body", "Featured Products", "Vendor Highlights", "New This Week (MCP)"]
+    required = ["<html", "<body", "NEW THIS WEEK", "Quick Notes"]
     missing = [x for x in required if x not in html]
     if missing:
         typer.echo(json.dumps({"ok": False, "missing": missing}, indent=2))

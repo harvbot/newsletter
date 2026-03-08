@@ -1,7 +1,16 @@
 notes:
-  - Welcome to this week's farm update.
-  - Availability can change quickly based on harvest volume.
-featured_products:
-  - Rainbow carrots
-  - Spring mix
-  - Oyster mushrooms
+  - Orders close Tuesday at midnight.
+  - Delivery and pickup windows are listed at checkout.
+
+callouts:
+  - New pork cuts from Return to Earth now live.
+
+hero_products:
+  - name: Pork Chops (Center Cut)
+    price: "$14.40"
+    vendor: Return to Earth
+    image: https://localline-public-images.s3.amazonaws.com/account/327759/JmN5A.display.jpeg
+    note: Great for weeknight grilling.
+
+suppress_products:
+  - Test Product Name

@@ -71,3 +71,14 @@ Open `docs/index.html` or publish via GitHub Pages.
    - writes `overrides.json`
 
 Then it composes `build/collected.json` (schema v1.2) with source provenance and pointers to source files.
+
+## Override rhythm (recommended)
+
+Keep one weekly file and update it throughout the week:
+- `overrides/week-YYYY-WW.yaml`
+
+Fields currently supported:
+- `hero_products`: pin/force products into the NEW THIS WEEK flyer cards
+- `notes`: quick notes section bullets
+- `callouts`: optional callout bullets
+- `suppress_products`: hide products by name
