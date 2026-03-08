@@ -104,47 +104,37 @@ def content_draft(
     collected = CollectedInput(**_read_json(input))
     week_label = f"{collected.window['start_date']} to {collected.window['end_date']}"
 
+    mcp_new_products = [
+        p for p in collected.price_list_products
+        if isinstance(p, dict) and str(p.get("price_list_category_name", "")).strip().lower() == "new"
+    ]
+
     featured = collected.overrides.get("featured_products") if isinstance(collected.overrides, dict) else None
     if not isinstance(featured, list) or not featured:
-        price_list_featured = [p.get("name", "") for p in collected.price_list_products[:5] if isinstance(p, dict)]
-        storefront_featured = [p.get("name", "") for p in collected.storefront_new_products[:5] if isinstance(p, dict)]
-        featured = (
-            [x for x in price_list_featured if x]
-            or [x for x in storefront_featured if x]
-            or [p["name"] for p in collected.top_products[:5]]
-        )
+        featured = [p.get("name", "") for p in mcp_new_products[:8] if p.get("name")]
+        if not featured:
+            featured = [p["name"] for p in collected.top_products[:5]]
 
     notes = []
     if isinstance(collected.overrides, dict) and isinstance(collected.overrides.get("notes"), list):
         notes = [str(x) for x in collected.overrides["notes"]]
 
-    new_storefront_items = []
-    for p in collected.storefront_new_products[:8]:
-        if not isinstance(p, dict):
-            continue
-        name = p.get("name", "")
-        price_cents = p.get("price_cents")
-        price = f"${(price_cents or 0)/100:.2f}" if isinstance(price_cents, int) else "Price TBD"
-        image = p.get("image_url") or ""
-        extra = f" ({price})"
-        if image:
-            extra += f" — {image}"
-        if name:
-            new_storefront_items.append(f"{name}{extra}")
-
-    price_list_items = []
-    for p in collected.price_list_products[:12]:
+    mcp_new_items = []
+    for p in mcp_new_products[:12]:
         if not isinstance(p, dict):
             continue
         name = p.get("name", "")
         price_cents = p.get("price_cents")
         price = f"${(price_cents or 0)/100:.2f}" if isinstance(price_cents, int) else "Price TBD"
         vendor = p.get("vendor_name", "")
+        image = p.get("image_url") or ""
         entry = f"{name} ({price})"
         if vendor:
             entry += f" — {vendor}"
+        if image:
+            entry += f" — {image}"
         if name:
-            price_list_items.append(entry)
+            mcp_new_items.append(entry)
 
     sections = [
         {
@@ -159,12 +149,8 @@ def content_draft(
             "items": featured,
         },
         {
-            "title": "New in Storefront",
-            "items": new_storefront_items or ["No new-category storefront products were collected this run."],
-        },
-        {
-            "title": "Available This Week",
-            "items": price_list_items or ["No price list products were collected this run."],
+            "title": "New This Week (MCP)",
+            "items": mcp_new_items or ["No MCP products were collected in category 'New' for this run."],
         },
         {
             "title": "Vendor Highlights",
@@ -205,7 +191,7 @@ def check_html(
     input: Path = typer.Option(..., "--input"),
 ) -> None:
     html = input.read_text()
-    required = ["<html", "<body", "Featured Products", "Vendor Highlights", "Available This Week"]
+    required = ["<html", "<body", "Featured Products", "Vendor Highlights", "New This Week (MCP)"]
     missing = [x for x in required if x not in html]
     if missing:
         typer.echo(json.dumps({"ok": False, "missing": missing}, indent=2))

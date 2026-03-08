@@ -183,13 +183,33 @@ def _collect_price_list_source(mcp_command: str) -> dict[str, Any]:
             or (vendor.get("name") if isinstance(vendor, dict) else "")
             or ""
         )
-        image_url = p.get("image_url") or p.get("image") or p.get("primary_image_url") or ""
+        image_url = p.get("image_url") or p.get("image") or p.get("primary_image_url") or p.get("display") or ""
+        if not image_url and isinstance(p.get("images"), list) and p["images"]:
+            first = p["images"][0]
+            if isinstance(first, dict):
+                image_url = first.get("display") or first.get("full") or first.get("thumbnail") or ""
+
         price_cents = (
             _to_price_cents(p.get("price_cents"))
             or _to_price_cents(p.get("price"))
             or _to_price_cents(p.get("unit_price"))
             or _to_price_cents(p.get("base_price"))
         )
+
+        # Price often lives under package_price_list_entries for Local Line storefront payloads.
+        if price_cents is None and isinstance(p.get("package_price_list_entries"), list):
+            package_prices = []
+            for e in p.get("package_price_list_entries", []):
+                if not isinstance(e, dict):
+                    continue
+                cents = _to_price_cents(e.get("package_price"))
+                if cents is None:
+                    cents = _to_price_cents(e.get("unit_price"))
+                if cents is not None:
+                    package_prices.append(cents)
+            if package_prices:
+                price_cents = min(package_prices)
+
         normalized_products.append({
             "name": name,
             "sku": str(p.get("sku") or p.get("id") or ""),
@@ -197,6 +217,7 @@ def _collect_price_list_source(mcp_command: str) -> dict[str, Any]:
             "image_url": str(image_url),
             "vendor_name": vendor_name,
             "currency": p.get("currency") or "CAD",
+            "price_list_category_name": str(p.get("price_list_category_name") or ""),
         })
 
     return {
